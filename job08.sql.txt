@@ -1,0 +1,48 @@
+CREATE DATABASE IF NOT EXISTS zoo;
+USE zoo;
+
+CREATE TABLE animal (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(255),
+    race VARCHAR(255),
+    id_cage INT,
+    date_naissance DATE,
+    pays_origine VARCHAR(255),
+    FOREIGN KEY (id_cage) REFERENCES cage(id)
+);
+
+CREATE TABLE cage (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    superficie DECIMAL(10, 2),
+    capacite_max INT
+);
+import mysql.connector
+
+# Paramètres de connexion à la base de données
+config = {
+    'user': 'votre_utilisateur',
+    'password': 'votre_mot_de_passe',
+    'host': 'votre_hôte',
+    'database': 'zoo'
+}
+
+# Connexion à la base de données
+conn = mysql.connector.connect(**config)
+cursor = conn.cursor()
+
+# Affichage de tous les animaux présents dans le zoo
+cursor.execute("SELECT * FROM animal")
+animaux = cursor.fetchall()
+for animal in animaux:
+    print(animal)
+
+# Affichage de la liste des animaux présents dans les cages
+cursor.execute("SELECT * FROM animal WHERE id_cage IS NOT NULL")
+animaux_dans_cages = cursor.fetchall()
+for animal in animaux_dans_cages:
+    print(animal)
+
+# Calcul de la superficie totale de toutes les cages
+cursor.execute("SELECT SUM(superficie) FROM cage")
+superficie_totale = cursor.fetchone()[0]
+print("Superficie totale de toutes les cages :", superficie_totale)

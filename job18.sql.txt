@@ -1,0 +1,2 @@
+mysql> DELETE FROM etudiant WHERE prenom = 'John' AND nom = 'Doe';
+Query OK, 0 rows affected (0.00 sec)

@@ -1,0 +1,7 @@
+mysql> SELECT AVG(age) AS moyenne_age FROM etudiant;
++-------------+
+| moyenne_age |
++-------------+
+|     23.3333 |
++-------------+
+1 row in set (0.00 sec)

@@ -1,0 +1,10 @@
+mysql> INSERT INTO etudiant (prenom, nom, age, email)VALUES ('Martin', 'Dupuis', 18, 'martin.dupuis@laplateforme.io');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM etudiant WHERE nom = 'Dupuis';
++----+--------+--------+-----+-------------------------------+
+| id | nom    | prenom | age | email                         |
++----+--------+--------+-----+-------------------------------+
+|  6 | Dupuis | Martin |  18 | martin.dupuis@laplateforme.io |
++----+--------+--------+-----+-------------------------------+
+1 row in set (0.00 sec)

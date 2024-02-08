@@ -1,0 +1,66 @@
+CREATE DATABASE IF NOT EXISTS ma_base_de_donnees;
+
+USE ma_base_de_donnees;
+
+CREATE TABLE employe (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(255),
+    prenom VARCHAR(255),
+    salaire DECIMAL(10, 2),
+    id_service INT,
+    FOREIGN KEY (id_service) REFERENCES service(id)
+);
+INSERT INTO employe (nom, prenom, salaire, id_service) VALUES
+('Doe', 'John', 3500.00, 1),
+('Smith', 'Alice', 2800.00, 2),
+('Brown', 'Michael', 4000.00, 1),
+('Johnson', 'Emily', 3200.00, 2);
+SELECT * FROM employe WHERE salaire > 3000.00;
+
+CREATE TABLE service (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(255)
+);
+
+INSERT INTO service (nom) VALUES
+('Service 1'),
+('Service 2');
+
+SELECT employe.*, service.nom AS service_nom
+FROM employe
+JOIN service ON employe.id_service = service.id;
+
+import mysql.connector
+
+class Employe:
+    def __init__(self, user, password, host, database):
+        self.conn = mysql.connector.connect(
+            user=user,
+            password=password,
+            host=host,
+            database=database
+        )
+        self.cursor = self.conn.cursor()
+
+    def get_employes_with_salary_above(self, salary_threshold):
+        query = "SELECT * FROM employe WHERE salaire > %s"
+        self.cursor.execute(query, (salary_threshold,))
+        return self.cursor.fetchall()
+
+    def get_employes_with_service(self):
+        query = "SELECT employe.*, service.nom AS service_nom FROM employe JOIN service ON employe.id_service = service.id"
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
+
+    def close_connection(self):
+        self.cursor.close()
+        self.conn.close()
+
+# Exemple d'utilisation de la classe Employe
+employe_manager = Employe(user='votre_utilisateur', password='votre_mot_de_passe', host='votre_hôte', database='ma_base_de_donnees')
+employes_with_high_salary = employe_manager.get_employes_with_salary_above(3000.00)
+print("Employés avec un salaire supérieur à 3000 € :", employes_with_high_salary)
+employes_with_service = employe_manager.get_employes_with_service()
+print("Employés avec leur service respectif :", employes_with_service)
+employe_manager.close_connection()
+
